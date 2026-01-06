@@ -1,0 +1,1878 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Wudanbegan Challenge</title>
+  <style>
+    :root{
+      --bg1:#f3ece3;
+      --bg2:#e9dfd4;
+      --card:#fbfaf8;
+      --ink:#1f1f1f;
+      --muted:#6c6258;
+      --line:#e4d8cc;
+      --accent:#c8a36a; /* goud */
+      --accent2:#b88f55;
+      --shadow: 0 18px 45px rgba(33, 24, 16, 0.12);
+      --shadow2: 0 10px 24px rgba(33, 24, 16, 0.10);
+      --radius: 28px;
+      --radius2: 18px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-serif, "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      color:var(--ink);
+      background:
+        radial-gradient(1200px 800px at 20% 10%, #fff6ea 0%, transparent 55%),
+        radial-gradient(900px 700px at 85% 20%, #f7efe6 0%, transparent 52%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+    }
+
+    .wrap{
+      max-width:1120px;
+      margin:0 auto;
+      padding:28px 18px 42px;
+    }
+
+    header{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:18px;
+      margin-bottom:18px;
+    }
+
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .kicker{
+      letter-spacing:0.12em;
+      text-transform:uppercase;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    h1{
+      margin:0;
+      font-size:34px;
+      line-height:1.12;
+      font-weight:650;
+    }
+
+    .sub{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+      max-width:62ch;
+      line-height:1.45;
+    }
+
+    .pillRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-end;
+    }
+
+    .pill{
+      border:1px solid var(--line);
+      background:rgba(251,250,248,0.7);
+      backdrop-filter: blur(8px);
+      padding:10px 12px;
+      border-radius:999px;
+      font-size:13px;
+      color:var(--muted);
+      box-shadow: 0 6px 16px rgba(33, 24, 16, 0.06);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap:18px;
+      align-items:start;
+    }
+
+    @media (max-width: 960px){
+      .grid{grid-template-columns:1fr; }
+      .pillRow{justify-content:flex-start;}
+    }
+
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,0.92), rgba(251,250,248,0.88));
+      border:1px solid rgba(228,216,204,0.9);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .cardInner{
+      padding:18px;
+    }
+
+    .panelTitle{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:10px;
+    }
+
+    .panelTitle h2{
+      margin:0;
+      font-size:18px;
+      font-weight:650;
+      letter-spacing:0.02em;
+    }
+
+    .btn{
+      appearance:none;
+      border:1px solid var(--line);
+      background:rgba(251,250,248,0.85);
+      color:var(--ink);
+      padding:10px 12px;
+      border-radius:999px;
+      font-size:13px;
+      cursor:pointer;
+      box-shadow: 0 8px 18px rgba(33, 24, 16, 0.08);
+      transition: transform 140ms ease, box-shadow 140ms ease;
+    }
+    .btn:hover{ transform: translateY(-1px); box-shadow: 0 10px 22px rgba(33, 24, 16, 0.10); }
+    .btn:active{ transform: translateY(0px); }
+
+    .btnAccent{
+      border-color: rgba(200,163,106,0.55);
+      background: linear-gradient(180deg, rgba(200,163,106,0.18), rgba(251,250,248,0.85));
+    }
+
+    .calendar{
+      padding:18px;
+    }
+
+    .calGrid{
+      display:grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap:10px;
+      margin-top:12px;
+    }
+
+    @media (max-width: 520px){
+      .calGrid{ grid-template-columns: repeat(5, 1fr); }
+    }
+
+    .dayBtn{
+      position:relative;
+      border:1px solid var(--line);
+      background:rgba(251,250,248,0.72);
+      border-radius:18px;
+      padding:12px 10px;
+      text-align:center;
+      cursor:pointer;
+      box-shadow: var(--shadow2);
+      transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+      user-select:none;
+    }
+    .dayBtn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(200,163,106,0.55);
+      background: rgba(251,250,248,0.92);
+    }
+    .dayBtn.active{
+      border-color: rgba(200,163,106,0.90);
+      box-shadow: 0 18px 40px rgba(33, 24, 16, 0.14);
+      background: rgba(251,250,248,0.96);
+    }
+
+    .dayNum{
+      font-size:14px;
+      font-weight:650;
+    }
+    .dayMeta{
+      margin-top:4px;
+      font-size:11px;
+      color:var(--muted);
+      letter-spacing:0.06em;
+      text-transform:uppercase;
+    }
+
+    .dot{
+      position:absolute;
+      width:10px;
+      height:10px;
+      border-radius:999px;
+      background: rgba(200,163,106,0.25);
+      border: 1px solid rgba(200,163,106,0.55);
+      top:10px;
+      right:10px;
+    }
+    .dayBtn.done .dot{
+      background: rgba(200,163,106,0.95);
+      border-color: rgba(200,163,106,0.95);
+      box-shadow: 0 8px 18px rgba(200,163,106,0.26);
+    }
+
+    .contentCard{
+      padding:18px;
+    }
+
+    .contentTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:12px;
+    }
+
+    .dayTitle{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+
+    .dayTitle .big{
+      margin:0;
+      font-size:20px;
+      font-weight:700;
+      letter-spacing:0.02em;
+    }
+    .dayTitle .small{
+      margin:0;
+      font-size:12px;
+      letter-spacing:0.12em;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+
+    .split{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:14px;
+    }
+
+    .section{
+      border:1px solid rgba(228,216,204,0.85);
+      background: rgba(255,255,255,0.55);
+      border-radius:24px;
+      padding:14px 14px 12px;
+    }
+
+    .section h3{
+      margin:0 0 10px;
+      font-size:14px;
+      letter-spacing:0.10em;
+      text-transform:uppercase;
+      color:var(--muted);
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .section h3 .badge{
+      width:8px;
+      height:8px;
+      border-radius:999px;
+      background: var(--accent);
+      box-shadow: 0 10px 20px rgba(200,163,106,0.25);
+    }
+
+    .routineList{
+      margin:0;
+      padding:0 0 0 18px;
+      color:var(--ink);
+      line-height:1.55;
+      font-size:14px;
+    }
+
+    .heavyTask{
+      margin:10px 0 0;
+      padding:10px 12px;
+      border-radius:16px;
+      border:1px solid rgba(200,163,106,0.45);
+      background: rgba(200,163,106,0.10);
+      line-height:1.55;
+      font-size:14px;
+    }
+
+    .story{
+      margin:0;
+      font-size:14px;
+      line-height:1.75;
+      color:#2b2621;
+      white-space:pre-wrap;
+    }
+
+    .mutedNote{
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.45;
+      margin-top:10px;
+    }
+
+    footer{
+      margin-top:18px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.45;
+      text-align:center;
+    }
+
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .ghost{
+      border-color: rgba(228,216,204,0.9);
+      background: rgba(251,250,248,0.55);
+      color: var(--muted);
+    }
+
+    .toggle{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:13px;
+      color:var(--muted);
+      user-select:none;
+    }
+
+    input[type="checkbox"]{
+      width:18px;height:18px;
+      accent-color: var(--accent2);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="kicker">Ancient Time</div>
+        <h1>Wudanbegan Shaolin Challenge</h1>
+        <p class="sub">
+          Eén pagina. Dertig dagen. Ochtend en avond. Routine en verhaal in dezelfde stilte.
+          Selecteer een dag in de kalender. Markeer hem als gedaan. Ga door.
+        </p>
+      </div>
+      <div class="pillRow">
+        <div class="pill">Monnik: Shen-Liang</div>
+        <div class="pill">Stijl: minimal, zacht goud</div>
+        <div class="pill">Opslag: lokaal op dit apparaat</div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="card calendar" aria-label="Kalender">
+        <div class="panelTitle">
+          <h2>Kalender 30 dagen</h2>
+          <div class="row">
+            <button id="resetBtn" class="btn ghost" type="button">Reset status</button>
+            <button id="todayBtn" class="btn btnAccent" type="button">Ga naar eerst open</button>
+          </div>
+        </div>
+
+        <div class="toggle">
+          <input id="hideDoneToggle" type="checkbox" />
+          <label for="hideDoneToggle">Verberg afgeronde dagen</label>
+        </div>
+
+        <div id="calGrid" class="calGrid"></div>
+
+        <div class="mutedNote">
+          Tip: klik een dag om de routine en het verhaal te lezen. Klik “Dag gedaan” om je voortgang op te slaan.
+        </div>
+      </section>
+
+      <section class="card contentCard" aria-label="Dagdetails">
+        <div class="contentTop">
+          <div class="dayTitle">
+            <p class="small" id="dayMeta">Dag</p>
+            <p class="big" id="dayTitle">Selecteer een dag</p>
+          </div>
+          <div class="row">
+            <button id="doneBtn" class="btn btnAccent" type="button" disabled>Dag gedaan</button>
+            <button id="undoneBtn" class="btn ghost" type="button" disabled>Ongedaan</button>
+          </div>
+        </div>
+
+        <div class="split">
+          <div class="section">
+            <h3><span class="badge"></span>Routine</h3>
+            <ol class="routineList" id="routineList"></ol>
+            <div class="heavyTask" id="heavyTask"></div>
+          </div>
+
+          <div class="section">
+            <h3><span class="badge"></span>Ochtend</h3>
+            <p class="story" id="morningStory"></p>
+          </div>
+
+          <div class="section">
+            <h3><span class="badge"></span>Avond</h3>
+            <p class="story" id="eveningStory"></p>
+          </div>
+        </div>
+
+        <div class="mutedNote" id="statusNote"></div>
+      </section>
+    </div>
+
+    <footer>
+      Dit is een statische pagina. Alles draait lokaal. Geen account, geen feed, geen beloning. Alleen doorgaan.
+    </footer>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "wudanbegan_done_days_v1";
+
+    const baseRoutine = [
+      "Bed opmaken",
+      "Workout (jullie normale routine)",
+      "5 minuten meditatie (focus op ademhaling)",
+      "Zware taak van de dag (zie hieronder)",
+      "Avond: lees avondfragment, korte reflectie 5 minuten"
+    ];
+
+    const heavyTasks = [
+      "50 push-ups extra boven je normale workout",
+      "20 minuten rennen terwijl je geen zin hebt",
+      "5 minuten plank challenge, houd langer vol dan normaal",
+      "Rond 2 taken af die je normaal uitstelt",
+      "Koude douche 1 minuut, of langer dan normaal",
+      "Maak iets schoon waar je normaal niets aan doet",
+      "30 minuten stilte, geen praten, geen telefoon, geen afleiding",
+      "Werk 30 minuten aan iets wat je uitstelt, studie of opruimen",
+      "Eet iets gezonds dat je eigenlijk niet lust",
+      "50 squats extra, of dubbele set in je workout",
+      "Leer 30 tot 60 minuten iets nieuws, skill, taal of puzzel",
+      "Koude douche 90 seconden",
+      "5 km wandelen of rennen zonder muziek of telefoon",
+      "Reflectie dag, geen klagen, noteer wat moeilijk was",
+      "Doe een moeilijke confrontatie, spreek eerlijk iets aan",
+      "60 push-ups of dubbele set in je workout",
+      "Doe een taak die je normaal ontwijkt, opruimen of klus",
+      "1 uur lezen of leren van iets dat je niet leuk vindt",
+      "Koude douche 2 minuten",
+      "Doe een fysieke uitdaging die je normaal vermijdt, sprints of zware core",
+      "30 minuten mediteren in stilte, focus op ademhaling",
+      "75 push-ups of dubbele workout plus plank 5 minuten",
+      "Confronteer je grootste angst van de week, een actie of gesprek",
+      "2 uur non stop werken aan een moeilijke taak",
+      "3 km hardlopen extra of een sprint challenge",
+      "Koude douche 3 minuten",
+      "1 uur stilte plus meditatie",
+      "Doe iets fysieks dat je normaal nooit doet, wall sit of burpees",
+      "Reflectie, schrijf wat zwaar was en wat je overwon",
+      "Eindsprint, volledige workout plus plank plus sprint plus meditatie plus stilte, vier overwinning"
+    ];
+
+    const stories = [
+      {
+        day: 1,
+        morning: `In mijn vierhonderdzevende jaar op Wudanbegan kwam de ochtend zonder aankondiging.
+De mist hing laag en zwaar, onaangedaan door mijn aanwezigheid.
+Ik had slecht geslapen, maar mijn lichaam stond op voordat de gedachte dat kon verhinderen.
+De stenen vloer voelde kouder dan verwacht.
+Ik merkte het op en liet het daarbij.
+Mijn ademhaling was eerst onrustig, daarna gelijkmatig.
+De berg bleef onveranderd, zoals altijd.
+Ik besefte dat ik wachtte op een teken dat niet zou komen.
+Er klonk geen bel.
+Geen meester sprak mijn naam.
+Ik begreep dat discipline begint waar bevestiging ontbreekt.
+Zonder aanwijzing rechtte ik mijn houding.
+Mijn lichaam herinnerde zich wat mijn geest probeerde te ontwijken.
+Mijn benen trilden licht, niet van zwakte, maar van aarzeling.
+Ik liet de aarzeling bestaan.
+De zon kwam langzaam op en onthulde niets nieuws.
+Toch was er iets verschoven.
+Ik voelde me niet gereed.
+Ik bewoog alsnog.
+Dit was de eerste les van de dag.`,
+        evening: `De nacht daalde stil neer over Wudanbegan.
+De berg schonk geen aandacht aan het verstrijken van de dag.
+Mijn lichaam droeg een doffe zwaarte, verdiend, niet opgelegd.
+Ik zat waar ik altijd zat, met het gezicht naar de duisternis.
+Gedachten kwamen op en trokken zich terug.
+Sommige keerden terug, onveranderd.
+Ik ging er niet tegenin.
+Mijn adem vertraagde toen ik ophield haar te sturen.
+Ik merkte hoe vaak ik verlichting zoek in plaats van rust.
+Vandaag bood geen van beide.
+Dat was aanvaardbaar.
+Ik overzag mijn handelingen zonder trots of afkeuring.
+Ik had niet uitgeblonken.
+Ik had mij ook niet teruggetrokken.
+Beide waren overwinningen.
+Mijn lichaam vroeg om slaap voordat mijn geest instemde.
+Ik gaf toe.
+Buiten bewoog de wind door de bomen.
+Hij vroeg geen toestemming.
+Morgen zal ik dat evenmin doen.`
+      },
+
+      /* Dag 2 t/m 30 */
+      {
+        day: 2,
+        morning: `De tweede ochtend bracht minder weerstand, maar geen lichtheid.
+Mijn lichaam stond op zonder protest, wat mij argwanend maakte.
+Gewenning lijkt op vooruitgang, maar is dat niet altijd.
+De lucht was helder, de berg scherp afgetekend.
+Ik voelde de neiging om dit als een goed teken te zien.
+Ik liet die neiging voorbijgaan.
+De ademhaling kwam sneller op gang dan gisteren.
+Mijn voeten vonden hun plaats zonder zoeken.
+Ik merkte hoe snel gemak zich aandient.
+En hoe gevaarlijk dat is.
+Discipline verzwakt zodra zij onopgemerkt blijft.
+Ik vertraagde bewust mijn bewegingen.
+Elke stap werd zwaarder door aandacht.
+Mijn schouders wilden versnellen.
+Ik dwong ze te blijven.
+De zon stond al hoger dan ik wilde.
+Tijd wacht niet.
+Dat is geen vijand, slechts een feit.
+Ik voltooide wat begonnen was.
+Zonder haast, zonder uitstel.`,
+        evening: `De avond bracht geen vermoeidheid, slechts spanning.
+Mijn lichaam was alert, alsof het iets verwachtte.
+Ik zat langer dan gepland.
+Niet uit discipline, maar uit waakzaamheid.
+Gedachten cirkelden rond dezelfde momenten.
+Niet de zwaarste.
+De gemakkelijkste.
+Daar lag de onrust.
+Ik zag hoe snel ik vertrouwen stel in routine.
+En hoe routine kan verdoven.
+Ik corrigeerde niets.
+Waarnemen was voldoende.
+De ademhaling bleef hoog in de borst.
+Ik liet haar daar.
+Beheersing begint niet met afdwingen.
+De nacht viel in lagen.
+Elke laag stiller dan de vorige.
+Ik bleef tot stilte geen inspanning meer vroeg.
+Toen ging ik liggen.
+Zonder verwachtingen.`
+      },
+      {
+        day: 3,
+        morning: `De derde dag voelde zwaarder dan de tweede.
+Niet in het lichaam, maar in de geest.
+Mijn ogen openden zich trager.
+Mijn aandacht was versnipperd.
+Ik herkende dit patroon.
+Het is geen vermoeidheid.
+Het is verzet in een andere vorm.
+De berg was gehuld in wolken.
+Zicht was beperkt.
+Dat paste bij de dag.
+Ik begon zonder overzicht.
+Mijn ademhaling stokte bij elke overgang.
+Ik liet haar terugkeren zonder dwang.
+De kou drong dieper door dan verwacht.
+Ik bleef staan.
+Beweging kwam later.
+Toen ze kwam, was ze ongehaast.
+Niet elegant, wel vastberaden.
+Ik beëindigde zonder opluchting.
+Dat voelde juist.`,
+        evening: `Die avond sprak het lichaam luider dan de geest.
+Spieren hielden vast wat spanning had kunnen loslaten.
+Ik ging zitten ondanks de aandrang te bewegen.
+Onrust zoekt altijd een uitweg.
+Ik bood haar geen ruimte.
+Gedachten spraken in korte zinnen.
+Herhalend.
+Dwingend.
+Ik hoorde ze aan zonder antwoord.
+De ademhaling bleef onregelmatig.
+Ik corrigeerde haar niet.
+Beheersing vraagt geduld.
+Niet ingrijpen is soms de moeilijkste handeling.
+Ik bleef tot de drang verminderde.
+Niet tot zij verdween.
+Dat was genoeg.
+De nacht voelde langer dan normaal.
+Toch sliep ik.
+Onvolledig.
+Maar voldoende.`
+      },
+      {
+        day: 4,
+        morning: `De vierde ochtend bracht helderheid zonder comfort.
+Mijn lichaam voelde bruikbaar, niet fris.
+Dat was voldoende.
+Ik merkte hoe weinig motivatie nodig is.
+Aanwezigheid volstaat.
+De berg was scherp, de lucht droog.
+Elke ademhaling brandde licht.
+Ik versnelde niet.
+Ik vertraagde niet.
+Ik hield tempo.
+Gedachten probeerden orde te scheppen.
+Ik liet ze falen.
+Beweging werd eenvoudiger toen ik ophield haar te beoordelen.
+Mijn houding zakte weg, daarna herstelde zij zich.
+Niet door kracht, maar door herhaling.
+Ik zag hoe correctie vanzelf ontstaat.
+Als men blijft.
+Ik bleef.
+Tot het einde.
+Zonder afronding.`,
+        evening: `Die avond voelde kort.
+Alsof de dag zich had teruggetrokken zonder afscheid.
+Mijn lichaam wilde liggen.
+Mijn geest wilde afronden.
+Ik stond geen van beide toe.
+Ik zat.
+Gedachten waren minder luid, maar talrijker.
+Ze vroegen om betekenis.
+Ik bood geen antwoorden.
+De ademhaling vond haar eigen ritme.
+Voor het eerst zonder toezicht.
+Ik merkte dit op.
+En liet het los.
+Niet alles hoeft bewaakt te worden.
+De spanning in mijn schouders week langzaam.
+Niet volledig.
+Dat was niet vereist.
+Ik eindigde zonder evaluatie.
+De nacht nam over.
+Zonder strijd.
+Zonder beloning.`
+      },
+      {
+        day: 5,
+        morning: `De vijfde ochtend bracht weerstand terug.
+Niet plotseling, maar sluipend.
+Mijn lichaam aarzelde bij het opstaan.
+Ik stond op voordat het kon onderhandelen.
+De lucht was koud en scherp.
+Mijn handen voelden traag.
+Ik begon met wat er was.
+Niet met wat gewenst was.
+Beweging vroeg meer aandacht dan eerder.
+Elke herhaling moest verdiend worden.
+Mijn ademhaling raakte uit balans.
+Ik herstelde haar niet direct.
+Eerst bleef ik.
+Daarna herstelde zij zich.
+Ik zag hoe snel controle terugkeert als men geduld heeft.
+Niet door kracht.
+Maar door aanwezigheid.
+Ik voltooide zonder opluchting.
+Zonder trots.
+Alleen voltooid.`,
+        evening: `Die avond voelde zwaarder dan verwacht.
+Niet door inspanning, maar door volharding.
+Mijn lichaam droeg vermoeidheid gelijkmatig.
+Mijn geest zocht afronding.
+Ik gaf haar geen samenvatting.
+Gedachten kwamen trager.
+Ze bleven langer hangen.
+Ik liet ze.
+De ademhaling was diep en traag.
+Dit voelde niet als overwinning.
+Dat was juist.
+Ik zag hoe snel ik betekenis wil toekennen.
+En hoe weinig dat toevoegt.
+De dag was niet beter dan gisteren.
+Maar ook niet slechter.
+Continuïteit is zeldzaam.
+Ik erkende dat.
+En ging liggen.
+Zonder verwachting.
+Zonder weerstand.`
+      },
+      {
+        day: 6,
+        morning: `De zesde ochtend begon stil.
+Geen aarzeling.
+Geen drang.
+Alleen beweging.
+Mijn lichaam kende de volgorde.
+Mijn geest volgde later.
+De berg lag open, zichtbaar tot ver.
+Dit bood geen voordeel.
+Ik begon zonder te versnellen.
+Elke stap voelde functioneel.
+Niet zwaar.
+Niet licht.
+Mijn ademhaling bleef laag.
+Mijn aandacht bleef smal.
+Dit was geen prestatie.
+Het was onderhoud.
+Ik corrigeerde kleine afwijkingen.
+Niet uit onvrede.
+Maar uit zorgvuldigheid.
+Ik eindigde zonder signaal.
+Zoals begonnen.`,
+        evening: `Die avond bracht weinig gedachten.
+Wat resteerde was fysiek.
+Spieren ontspanden traag.
+Ik zat zonder tijdsbesef.
+De ademhaling was vanzelfsprekend.
+Ik hoefde haar niet te volgen.
+Dit verraste me kort.
+Daarna niet meer.
+Ik zag hoe aandacht verschuift wanneer controle afneemt.
+Dit voelde stabiel.
+Niet prettig.
+Niet zwaar.
+Gewoon aanwezig.
+Ik bleef tot blijven geen beslissing meer was.
+Toen stond ik op.
+De nacht nam over zonder weerstand.
+Ik sliep diep.
+Niet lang.
+Maar diep genoeg.
+Dat was voldoende.`
+      },
+      {
+        day: 7,
+        morning: `De zevende ochtend voelde anders.
+Niet uitzonderlijk.
+Maar afgerond.
+Mijn lichaam stond op met zekerheid.
+Niet met gemak.
+De lucht was zacht, de berg stil.
+Ik begon zonder te tellen.
+Beweging volgde beweging.
+Mijn ademhaling bleef constant.
+Mijn aandacht week nauwelijks.
+Ik merkte dit pas achteraf.
+Tijdens was er alleen uitvoering.
+Dit was geen vooruitgang.
+Dit was consistentie.
+Ik hield vast wat zich had opgebouwd.
+Zonder het te forceren.
+De zon stond hoger dan op dag één.
+Ik beëindigde zonder reflectie.
+Die zou later komen.
+Ik verliet de plek rustig.`,
+        evening: `De zevende avond bracht ruimte.
+Niet in tijd, maar in aandacht.
+Ik keek terug zonder te analyseren.
+Zeven dagen vormden geen geheel.
+Maar een begin.
+Mijn lichaam voelde betrouwbaar.
+Mijn geest minder dominant.
+Dit was geen overwinning.
+Het was een verschuiving.
+Ik zag waar verzet was afgenomen.
+En waar het zich had verplaatst.
+Discipline verandert van vorm.
+Zij verdwijnt niet.
+Ik accepteerde dat.
+De ademhaling was rustig.
+De nacht vriendelijk.
+Ik sloot de week zonder ceremonie.
+Morgen zou geen herhaling zijn.
+Maar voortzetting.
+Dat was genoeg.`
+      },
+
+      /* Om het bericht leesbaar te houden plaats ik dag 8 t/m 30 in dezelfde vorm hieronder.
+         Je kunt dit bestand direct gebruiken.
+      */
+
+      {
+        day: 8,
+        morning: `De achtste ochtend begon zonder weerstand, maar ook zonder scherpte.
+Mijn lichaam deed wat het moest doen.
+Mijn geest liep achter.
+Ik liet dat toe.
+De lucht was koel, de grond droog.
+Mijn voeten vonden hun plaats zonder nadenken.
+Ik merkte hoe routine zich had genesteld.
+Niet als gemak, maar als vanzelfsprekendheid.
+Dit was gevaarlijker dan vermoeidheid.
+Ik vertraagde bewust.
+Elke beweging kreeg opnieuw gewicht.
+De ademhaling werd hoorbaar.
+Ik liet haar dat zijn.
+Aandacht keerde terug in korte momenten.
+Niet constant.
+Dat was voldoende.
+Ik voltooide zonder te versnellen.
+Niet uit discipline.
+Maar uit zorg.
+De dag was begonnen.`,
+        evening: `Die avond voelde leeg.
+Niet hol, maar open.
+Mijn lichaam vroeg weinig.
+Mijn geest probeerde betekenis te vinden.
+Ik bood haar stilte.
+Gedachten kwamen zonder urgentie.
+Ze bleven hangen, zonder te drukken.
+Ik merkte hoe controle losser werd.
+Niet door keuze.
+Maar door herhaling.
+De ademhaling liep vanzelf.
+Ik hoefde haar niet te volgen.
+Dit was nieuw.
+Ik bleef zitten zonder doel.
+Tijd werd vaag.
+Toen ik opstond, voelde het logisch.
+Niet juist.
+Niet fout.
+Gewoon logisch.
+Ik sliep zonder onderbreking.`
+      },
+      {
+        day: 9,
+        morning: `De negende ochtend bracht weerstand terug.
+Niet in het lichaam.
+In de intentie.
+Ik stond op zonder tegenzin, maar ook zonder overtuiging.
+De berg lag stil.
+Te stil.
+Ik begon zonder scherpte.
+Bewegingen waren correct, maar leeg.
+Ik herkende dit.
+Discipline zonder aandacht verliest richting.
+Ik vertraagde opnieuw.
+Elke herhaling werd zwaarder.
+Niet fysiek.
+Mentaal.
+De ademhaling stokte kort.
+Ik bleef.
+Daar keerde zij terug.
+Niet rustig.
+Wel aanwezig.
+Dat was genoeg.`,
+        evening: `Die avond voelde onrustig.
+Mijn lichaam was kalm.
+Mijn geest niet.
+Gedachten trokken aan mij.
+Niet hard.
+Maar constant.
+Ik zag hoe snel ik betekenis wil herstellen.
+Alsof leegte een fout is.
+Ik bleef zitten.
+De ademhaling bleef hoog.
+Ik corrigeerde haar niet.
+Na verloop van tijd zakte zij vanzelf.
+Ik voelde geen opluchting.
+Alleen afname.
+Dat was voldoende.
+De nacht kwam langzaam.
+Ik liet haar binnen.
+Zonder verzet.
+Zonder verwachting.`
+      },
+      {
+        day: 10,
+        morning: `De tiende ochtend voelde zwaarder dan nodig.
+Mijn lichaam was bereid.
+Mijn geest verzette zich.
+Ik stond op voordat twijfel kon groeien.
+De lucht was scherp.
+Mijn ademhaling onregelmatig.
+Ik begon zonder correctie.
+Eerst bewegen.
+Dan bijstellen.
+Mijn aandacht dwaalde af.
+Ik bracht haar terug.
+Niet streng.
+Volhardend.
+Elke terugkeer kostte moeite.
+Dat was de oefening.
+Niet de beweging.
+Niet de kracht.
+Maar de terugkeer.
+Ik eindigde zonder tevredenheid.
+Dat voelde juist.`,
+        evening: `Die avond bleef de geest actief.
+Mijn lichaam zocht rust.
+Ik gaf haar geen prioriteit.
+Ik zat.
+Gedachten vormden geen verhalen.
+Alleen flarden.
+Ik liet ze voorbijgaan.
+De ademhaling bleef onrustig.
+Ik liet haar.
+Beheersing vraagt geen haast.
+Na verloop van tijd zakte de spanning.
+Niet volledig.
+Dat was niet nodig.
+Ik stond op zonder afronding.
+De nacht voelde lang.
+Maar draaglijk.
+Ik sliep ondiep.
+Toch herstellend.
+Dat was voldoende.`
+      },
+      {
+        day: 11,
+        morning: `De elfde ochtend begon helder.
+Mijn lichaam voelde stabiel.
+Mijn geest volgde sneller dan voorheen.
+Ik begon zonder aarzeling.
+De bewegingen liepen vloeiender.
+Niet mooier.
+Wel consistenter.
+Ik merkte hoe weinig correctie nodig was.
+Dit vroeg waakzaamheid.
+Stabiliteit nodigt uit tot verslapping.
+Ik bleef alert.
+De ademhaling was laag en rustig.
+Mijn aandacht smal.
+Ik hield haar daar.
+Tot het einde.
+Zonder versnelling.
+Zonder vertraging.
+Dit was geen piek.
+Dit was onderhoud.`,
+        evening: `Die avond voelde compact.
+Alsof de dag minder ruimte had ingenomen.
+Mijn lichaam was ontspannen.
+Mijn geest stil genoeg.
+Ik zat zonder tijdsdruk.
+Gedachten kwamen sporadisch.
+Ik liet ze.
+De ademhaling bleef gelijkmatig.
+Ik merkte hoe weinig ik hoefde te doen.
+Dit was nieuw.
+Niet comfortabel.
+Wel stabiel.
+Ik bleef tot de stilte zichzelf droeg.
+Toen ging ik liggen.
+De nacht kwam zonder onderbreking.
+Ik sliep diep.
+Lang genoeg.
+Zonder dromen.
+Dat was voldoende.`
+      },
+      {
+        day: 12,
+        morning: `De twaalfde ochtend bracht geen verrassing.
+Mijn lichaam stond op zonder vraag.
+Mijn geest volgde zonder discussie.
+Ik begon zonder te controleren.
+Bewegingen vloeiden samen.
+Niet perfect.
+Wel betrouwbaar.
+De ademhaling bleef laag.
+Mijn aandacht bleef smal.
+Ik voelde geen drang om te versnellen.
+Geen behoefte om te stoppen.
+Dit was zeldzaam.
+Ik bleef alert.
+Niet uit wantrouwen.
+Maar uit zorg.
+De oefening voltooide zichzelf.
+Ik hoefde haar niet af te ronden.
+Ik eindigde zonder markering.
+Zoals zij begonnen was.
+Stil.`,
+        evening: `Die avond voelde licht.
+Niet in het lichaam.
+In de geest.
+Gedachten kwamen langzaam.
+Ze bleven kort.
+Ik liet ze.
+De ademhaling was vanzelfsprekend.
+Ik hoefde haar niet te volgen.
+Dit voelde stabiel.
+Niet euforisch.
+Niet leeg.
+Gewoon stabiel.
+Ik bleef zitten zonder doel.
+Tijd verloor betekenis.
+Toen ik opstond, voelde dat logisch.
+Ik sliep diep.
+Zonder onderbreking.
+Zonder dromen.
+Dat was voldoende.`
+      },
+      {
+        day: 13,
+        morning: `De dertiende ochtend bracht weerstand in een nieuwe vorm.
+Niet fysiek.
+Niet mentaal.
+Emotioneel.
+Een lichte tegenzin zonder reden.
+Ik herkende dit.
+Het lichaam en de geest hadden zich aangepast.
+Nu sprak iets anders.
+Ik begon zonder het te benoemen.
+Beweging voelde zwaarder dan nodig.
+Ik bleef.
+De ademhaling verschoof.
+Ik corrigeerde haar niet.
+Langzaam zakte de spanning.
+Niet volledig.
+Dat was niet vereist.
+Ik eindigde zonder opluchting.
+Zonder weerstand.
+Dit was voldoende.
+De dag kon beginnen.`,
+        evening: `Die avond bleef de emotionele spanning hangen.
+Niet als last.
+Als aanwezigheid.
+Ik zat zonder haar te duwen.
+Gedachten kwamen aarzelend.
+Ik liet ze.
+De ademhaling bleef onregelmatig.
+Ik liet haar.
+Na verloop van tijd verminderde de lading.
+Niet door ingrijpen.
+Door tijd.
+Ik zag hoe weinig nodig is.
+Wanneer men blijft.
+Ik stond op zonder afronding.
+De nacht voelde zacht.
+Ik sliep licht.
+Maar rustig.
+Dat was genoeg.`
+      },
+      {
+        day: 14,
+        morning: `De veertiende ochtend voelde afgerond.
+Niet als einde.
+Als overgang.
+Mijn lichaam was betrouwbaar.
+Mijn geest minder dominant.
+Ik begon zonder spanning.
+Bewegingen liepen vanzelf.
+Ik hield aandacht bij elke stap.
+Niet krampachtig.
+Waakzaam.
+De ademhaling bleef laag.
+Mijn houding stabiel.
+Ik merkte hoe weinig correctie nodig was.
+Dit was geen ontspanning.
+Dit was beheersing.
+Ik voltooide zonder markering.
+Zonder verwachting.
+De dag lag open.
+Ik betrad haar rustig.`,
+        evening: `De veertiende avond bracht stilte.
+Niet leeg.
+Vol.
+Ik zat zonder noodzaak.
+Gedachten kwamen zelden.
+Wanneer ze kwamen, bleven ze kort.
+De ademhaling was vanzelfsprekend.
+Ik hoefde haar niet te volgen.
+Ik zag hoe veertien dagen geen geheel vormden.
+Maar een fundament.
+Discipline had zich gezet.
+Niet als dwang.
+Als structuur.
+Ik accepteerde dit.
+De nacht viel zacht.
+Ik ging liggen zonder reflectie.
+Morgen zou anders zijn.
+Niet moeilijker.
+Dieper.`
+      },
+
+      /* Dag 15 t/m 30 */
+      {
+        day: 15,
+        morning: `De vijftiende ochtend bracht geen weerstand, maar zwaarte.
+Niet in het lichaam.
+In de intentie.
+Ik stond op zonder twijfel, maar ook zonder drang.
+De berg lag open, helder, onverschillig.
+Ik begon zonder verwachting.
+Beweging kwam traag op gang.
+Elke stap voelde bewuster dan nodig.
+Dit was geen achteruitgang.
+Het was verdieping.
+Mijn ademhaling bleef laag, maar gespannen.
+Ik liet haar.
+Correctie zou verbergen wat zichtbaar moest blijven.
+Mijn aandacht bleef bij het ongemak.
+Ik week er niet voor.
+Ik zocht het ook niet op.
+Ik bleef.
+Tot het werk zichzelf droeg.
+Ik eindigde zonder afronding.
+De dag begon stil.`,
+        evening: `Die avond bleef de zwaarte aanwezig.
+Niet als last.
+Als herinnering.
+Mijn lichaam vroeg om rust.
+Mijn geest om verklaring.
+Ik gaf geen van beide.
+Ik zat.
+Gedachten kwamen langzaam.
+Ze bleven langer dan voorheen.
+Ik liet ze.
+De ademhaling bleef gespannen.
+Ik liet haar.
+Beheersing vraagt soms niets doen.
+Ik bleef tot de spanning haar scherpte verloor.
+Niet tot zij verdween.
+Dat was genoeg.
+Ik ging liggen zonder opluchting.
+De nacht was onrustig.
+Maar eerlijk.
+Dat volstond.`
+      },
+      {
+        day: 16,
+        morning: `De zestiende ochtend voelde zwaar bij het ontwaken.
+Mijn lichaam was bereid.
+Mijn geest aarzelde.
+Ik stond op voordat aarzeling vorm kreeg.
+De lucht was koud, scherp.
+Mijn ademhaling bleef hoog.
+Ik begon zonder correctie.
+Beweging vroeg meer inzet dan verwacht.
+Ik vertraagde.
+Niet om te sparen.
+Om te blijven voelen.
+Mijn aandacht wilde weg.
+Ik bracht haar terug.
+Niet vriendelijk.
+Niet hard.
+Volhardend.
+Ik voltooide zonder tevredenheid.
+Dat was juist.
+De dag vroeg geen meer.`,
+        evening: `Die avond voelde lang.
+Niet door tijd.
+Door aanwezigheid.
+Mijn lichaam hield spanning vast.
+Ik zat zonder haar te verzachten.
+Gedachten bleven op afstand.
+Dit verraste me.
+De ademhaling kwam langzaam tot rust.
+Ik liet haar daar.
+Geen verdieping.
+Geen afsluiting.
+Alleen blijven.
+Ik zag hoe discipline verandert wanneer het moeilijk wordt.
+Zij wordt stiller.
+Strakker.
+Ik accepteerde dit.
+De nacht viel zwaar.
+Ik sliep diep.
+Maar kort.
+Dat was voldoende.`
+      },
+      {
+        day: 17,
+        morning: `De zeventiende ochtend bracht helderheid.
+Niet als opluchting.
+Als scherpte.
+Mijn lichaam stond op zonder discussie.
+Mijn geest volgde direct.
+Ik begon zonder vertraging.
+Bewegingen waren strak.
+Niet vloeiend.
+Functioneel.
+Mijn ademhaling bleef laag.
+Mijn aandacht smal.
+Dit voelde niet prettig.
+Dat hoefde ook niet.
+Ik bleef exact binnen wat nodig was.
+Geen extra.
+Geen tekort.
+Ik eindigde zonder afronding.
+De dag lag open.
+Ik betrad haar zonder terughoudendheid.`,
+        evening: `Die avond voelde compact.
+Alsof de dag weinig ruimte had genomen.
+Mijn lichaam was moe.
+Mijn geest stil.
+Ik zat zonder verwachting.
+Gedachten kwamen zelden.
+Wanneer ze kwamen, bleven ze kort.
+Ik liet ze.
+De ademhaling was vanzelfsprekend.
+Ik hoefde haar niet te volgen.
+Dit voelde stabiel.
+Niet comfortabel.
+Niet zwaar.
+Gewoon stabiel.
+Ik bleef tot blijven geen inspanning meer vroeg.
+Toen ging ik liggen.
+De nacht kwam zonder weerstand.
+Ik sliep diep.
+Dat was genoeg.`
+      },
+      {
+        day: 18,
+        morning: `De achttiende ochtend bracht vermoeidheid.
+Eerlijk.
+Zonder drama.
+Mijn lichaam stond op traag.
+Mijn geest volgde zonder verzet.
+Ik begon zonder haast.
+Beweging voelde zwaarder dan normaal.
+Ik versnelde niet.
+Ik vertraagde niet.
+Ik hield tempo.
+Mijn ademhaling bleef onregelmatig.
+Ik liet haar.
+Aandacht bleef bij het werk.
+Niet bij de uitkomst.
+Dit was onderhoud.
+Geen training.
+Ik voltooide zonder opluchting.
+Dat was passend.
+De dag kon beginnen.`,
+        evening: `Die avond bleef de vermoeidheid hangen.
+Niet als klacht.
+Als feit.
+Ik zat zonder haar te verzachten.
+Gedachten kwamen traag.
+Ik liet ze.
+De ademhaling was diep.
+Langzaam.
+Dit voelde herstellend.
+Niet verfrissend.
+Ik bleef tot het lichaam losliet.
+Niet alles.
+Maar genoeg.
+Ik ging liggen zonder reflectie.
+De nacht was zwaar.
+Maar stil.
+Ik sliep lang.
+Dat was nodig.`
+      },
+      {
+        day: 19,
+        morning: `De negentiende ochtend bracht lichtheid.
+Onverwacht.
+Mijn lichaam voelde bruikbaar.
+Mijn geest helder.
+Ik begon zonder aarzeling.
+Bewegingen liepen soepel.
+Niet los.
+Gecontroleerd.
+Mijn ademhaling bleef laag.
+Mijn aandacht scherp.
+Dit voelde als balans.
+Ik bleef waakzaam.
+Balans is vluchtig.
+Ik hield haar vast zonder te knijpen.
+Tot het einde.
+Zonder versnelling.
+Zonder vertraging.
+Ik eindigde rustig.
+De dag begon helder.`,
+        evening: `Die avond voelde open.
+Mijn lichaam was ontspannen.
+Mijn geest stil.
+Ik zat zonder noodzaak.
+Gedachten kwamen nauwelijks.
+Wanneer ze kwamen, lieten ze los.
+Ik hoefde niets te doen.
+Dit verraste me niet meer.
+Ik bleef tot stilte vanzelfsprekend werd.
+Toen stond ik op.
+De nacht viel zacht.
+Ik sliep diep.
+Zonder onderbreking.
+Zonder dromen.
+Dat was voldoende.`
+      },
+      {
+        day: 20,
+        morning: `De twintigste ochtend bracht scherpte terug.
+Niet hard.
+Helder.
+Mijn lichaam stond op zonder aarzeling.
+Mijn geest volgde direct.
+Ik begon zonder correctie.
+Bewegingen waren gecontroleerd.
+Mijn ademhaling stabiel.
+Mijn aandacht vast.
+Dit voelde betrouwbaar.
+Ik bleef binnen de grenzen.
+Niet om te sparen.
+Om te bewaren.
+Discipline vraagt onderhoud.
+Geen escalatie.
+Ik voltooide zonder markering.
+Zoals begonnen.
+Stil.`,
+        evening: `Die avond voelde afgerond.
+Niet als einde.
+Als overgang.
+Mijn lichaam was rustig.
+Mijn geest helder.
+Ik zat zonder analyse.
+Gedachten kwamen niet.
+Dat was nieuw.
+Ik bleef toch.
+Aanwezigheid vraagt geen prikkel.
+De ademhaling was vanzelfsprekend.
+Ik liet haar.
+Ik stond op zonder afronding.
+De nacht kwam snel.
+Ik sliep diep.
+Herstellend.
+Dat was genoeg.`
+      },
+      {
+        day: 21,
+        morning: `De eenentwintigste ochtend voelde zwaar.
+Niet onverwacht.
+Het midden van het pad is zelden licht.
+Mijn lichaam stond op zonder tegenzin.
+Mijn geest was stil.
+Te stil.
+Ik begon zonder uitstel.
+Beweging voelde functioneel.
+Niet inspirerend.
+Dat was voldoende.
+Mijn ademhaling bleef laag.
+Mijn aandacht smal.
+Ik hield haar daar.
+Niet uit kracht.
+Uit discipline.
+Ik voltooide zonder gevoel.
+Dat was juist.
+De dag lag open.
+Ik betrad haar zonder verwachting.`,
+        evening: `Die avond voelde leeg.
+Niet hol.
+Uitgeput.
+Mijn lichaam vroeg om rust.
+Mijn geest bood geen weerstand.
+Ik zat kort.
+Langer was niet nodig.
+Gedachten kwamen niet.
+Dat was nieuw.
+Ik merkte het op.
+En liet het.
+De ademhaling was zwaar.
+Diep.
+Herstellend.
+Ik ging liggen zonder reflectie.
+De nacht viel snel.
+Ik sliep diep.
+Lang.
+Dit was nodig.`
+      },
+      {
+        day: 22,
+        morning: `De tweeëntwintigste ochtend begon zonder gewicht.
+Dat verontrustte mij kort.
+Lichtheid is geen beloning.
+Het is een toestand die waakzaamheid vraagt.
+Mijn lichaam stond op zonder aarzeling.
+Mijn geest bleef stil.
+Ik begon zonder controle.
+Bewegingen liepen vanzelf.
+Te vanzelf.
+Ik vertraagde bewust.
+Elke stap kreeg opnieuw aandacht.
+Mijn ademhaling bleef laag.
+Mijn aandacht scherp.
+Ik bleef binnen het werk.
+Niet erboven.
+Niet eronder.
+Dit was geen rustdag.
+Dit was onderhoud op diepte.
+Ik eindigde zonder markering.
+De dag begon zonder belofte.`,
+        evening: `Die avond voelde dun.
+Alsof de dag weinig had achtergelaten.
+Mijn lichaam was rustig.
+Mijn geest leeg.
+Ik zat zonder noodzaak.
+Gedachten kwamen nauwelijks.
+Wanneer ze kwamen, bleven ze niet.
+Ik merkte hoe stilte niet langer iets was om te bereiken.
+Zij was aanwezig.
+Ik bleef toch zitten.
+Niet uit discipline.
+Uit respect.
+De ademhaling was vanzelfsprekend.
+Ik liet haar.
+Ik stond op zonder afronding.
+De nacht kwam geruisloos.
+Ik sliep licht.
+Maar ongestoord.
+Dat was voldoende.`
+      },
+      {
+        day: 23,
+        morning: `De drieëntwintigste ochtend bracht spanning terug.
+Niet plotseling.
+Doelgericht.
+Mijn lichaam voelde scherp.
+Mijn geest alert.
+Ik begon zonder uitstel.
+Bewegingen waren gecontroleerd.
+Niet vloeiend.
+Nauwkeurig.
+Mijn ademhaling bleef strak.
+Ik liet haar.
+Aandacht bleef bij de uitvoering.
+Niet bij het resultaat.
+Ik voelde waar ik wilde versnellen.
+Ik deed het niet.
+Dit was de oefening.
+Niet kracht.
+Niet uithouding.
+Maar beheersing.
+Ik eindigde zonder opluchting.`,
+        evening: `Die avond bleef de spanning hangen.
+Niet als last.
+Als scherpte.
+Ik zat zonder haar te verzachten.
+Gedachten bleven functioneel.
+Niet emotioneel.
+Ik liet ze.
+De ademhaling bleef hoog.
+Ik corrigeerde haar niet.
+Beheersing is niet altijd ontspanning.
+Ik bleef tot de spanning haar nut verloor.
+Niet tot zij verdween.
+Dat was genoeg.
+Ik ging liggen zonder reflectie.
+De nacht voelde kort.
+Maar herstellend.
+Ik sliep diep.
+Dat volstond.`
+      },
+      {
+        day: 24,
+        morning: `De vierentwintigste ochtend voelde zwaar.
+Niet fysiek.
+Mentale druk had zich opgebouwd.
+Mijn lichaam stond op zonder protest.
+Mijn geest wilde vertragen.
+Ik begon toch.
+Beweging vroeg aandacht.
+Elke herhaling moest gekozen worden.
+Mijn ademhaling raakte uit balans.
+Ik liet haar.
+Herstel kwam later.
+Niet door ingrijpen.
+Door blijven.
+Dit was geen training.
+Dit was doorzetting.
+Ik hield vast tot het einde.
+Niet mooi.
+Wel eerlijk.
+Ik eindigde zonder afronding.`,
+        evening: `Die avond voelde zwaar.
+Mijn lichaam droeg de dag zichtbaar.
+Mijn geest was stil.
+Ik zat kort.
+Langer was niet nodig.
+Gedachten kwamen niet.
+Dat was nieuw.
+Ik merkte het op.
+En liet het.
+De ademhaling was diep.
+Langzaam.
+Herstellend.
+Ik ging liggen zonder evaluatie.
+De nacht was donker.
+Maar rustig.
+Ik sliep lang.
+Dit was nodig.
+Dit was herstel.`
+      },
+      {
+        day: 25,
+        morning: `De vijfentwintigste ochtend bracht helderheid.
+Niet licht.
+Helder.
+Mijn lichaam voelde betrouwbaar.
+Mijn geest scherp.
+Ik begon zonder aarzeling.
+Bewegingen waren efficiënt.
+Geen extra.
+Geen tekort.
+Mijn ademhaling bleef stabiel.
+Mijn aandacht vast.
+Dit voelde als beheersing.
+Niet als kracht.
+Ik bleef waakzaam.
+Beheersing is vluchtig.
+Ik voltooide zonder versnelling.
+Zonder vertraging.
+Dit was onderhoud.
+Niet vooruitgang.
+Dat was juist.`,
+        evening: `Die avond voelde compact.
+Alsof de dag weinig ruimte had ingenomen.
+Mijn lichaam was ontspannen.
+Mijn geest stil.
+Ik zat zonder doel.
+Gedachten kwamen nauwelijks.
+Wanneer ze kwamen, lieten ze los.
+De ademhaling was vanzelfsprekend.
+Ik hoefde haar niet te volgen.
+Dit was stabiel.
+Niet euforisch.
+Niet leeg.
+Gewoon stabiel.
+Ik stond op zonder afronding.
+De nacht kwam snel.
+Ik sliep diep.
+Dat was voldoende.`
+      },
+      {
+        day: 26,
+        morning: `De zesentwintigste ochtend begon zwaar.
+Niet onverwacht.
+Het einde nadert zelden licht.
+Mijn lichaam stond op zonder tegenzin.
+Mijn geest bleef functioneel.
+Ik begon zonder controle.
+Beweging voelde trager.
+Ik hield tempo.
+Niet sneller.
+Niet langzamer.
+Mijn ademhaling bleef hoorbaar.
+Ik liet haar.
+Aandacht bleef bij het werk.
+Niet bij de uitkomst.
+Dit was geen laatste inspanning.
+Dit was vasthouden.
+Ik eindigde zonder gevoel.
+Dat was passend.`,
+        evening: `Die avond voelde stil.
+Niet leeg.
+Afgewerkt.
+Mijn lichaam was moe.
+Mijn geest rustig.
+Ik zat kort.
+Langer was niet nodig.
+Gedachten kwamen niet.
+Dat verraste mij niet meer.
+De ademhaling was diep.
+Langzaam.
+Herstellend.
+Ik ging liggen zonder reflectie.
+De nacht kwam snel.
+Ik sliep diep.
+Lang.
+Dit was nodig.`
+      },
+      {
+        day: 27,
+        morning: `De zevenentwintigste ochtend bracht spanning.
+Niet door twijfel.
+Door verwachting.
+Mijn lichaam voelde klaar.
+Mijn geest ook.
+Ik begon zonder uitstel.
+Bewegingen waren strak.
+Gecontroleerd.
+Mijn ademhaling bleef laag.
+Mijn aandacht scherp.
+Ik voelde waar ik wilde afronden.
+Ik deed het niet.
+Dit was geen afronding.
+Dit was voortzetting.
+Ik hield vast tot het einde.
+Zonder versnelling.
+Zonder markering.
+De dag begon open.
+Ik betrad haar rustig.`,
+        evening: `Die avond voelde geladen.
+Niet zwaar.
+Vol.
+Mijn lichaam was rustig.
+Mijn geest aanwezig.
+Ik zat zonder analyse.
+Gedachten kwamen kort.
+Ze bleven niet.
+De ademhaling was vanzelfsprekend.
+Ik liet haar.
+Ik merkte hoe weinig nodig is.
+Wanneer alles is opgebouwd.
+Ik stond op zonder afronding.
+De nacht kwam langzaam.
+Ik sliep diep.
+Ononderbroken.
+Dat was voldoende.`
+      },
+      {
+        day: 28,
+        morning: `De achtentwintigste ochtend voelde helder.
+Niet als opluchting.
+Als precisie.
+Mijn lichaam stond op zonder twijfel.
+Mijn geest volgde direct.
+Ik begon zonder correctie.
+Bewegingen waren exact.
+Niet mooi.
+Juist.
+Mijn ademhaling bleef stabiel.
+Mijn aandacht vast.
+Ik bleef binnen het werk.
+Niet erboven.
+Niet eronder.
+Dit voelde afgerond.
+Ik corrigeerde dat gevoel niet.
+Ik liet het bestaan.
+Ik eindigde zonder markering.`,
+        evening: `Die avond voelde afgerond.
+Niet als einde.
+Als stilte na inspanning.
+Mijn lichaam was ontspannen.
+Mijn geest stil.
+Ik zat zonder noodzaak.
+Gedachten kwamen niet.
+Dat was vanzelfsprekend geworden.
+De ademhaling was diep.
+Langzaam.
+Ik bleef kort.
+Langer was niet nodig.
+Ik ging liggen zonder reflectie.
+De nacht kwam zacht.
+Ik sliep diep.
+Herstellend.
+Dat was genoeg.`
+      },
+      {
+        day: 29,
+        morning: `De negenentwintigste ochtend bracht zwaarte.
+Niet fysiek.
+Symbolisch.
+Mijn lichaam stond op zonder aarzeling.
+Mijn geest voelde het naderende einde.
+Ik begon zonder vertraging.
+Bewegingen waren zorgvuldig.
+Bewust.
+Mijn ademhaling bleef laag.
+Mijn aandacht scherp.
+Ik bleef bij elke herhaling.
+Niet om vast te houden.
+Om los te laten.
+Dit was geen afscheid.
+Dit was voltooiing in beweging.
+Ik eindigde zonder afronding.
+De dag begon stil.`,
+        evening: `Die avond voelde zwaar.
+Niet als last.
+Als afronding.
+Mijn lichaam was moe.
+Mijn geest helder.
+Ik zat langer dan nodig.
+Niet uit discipline.
+Uit respect.
+Gedachten kwamen langzaam.
+Ze bleven kort.
+De ademhaling was diep.
+Langzaam.
+Ik liet haar.
+Ik zag het pad zonder het te benoemen.
+Ik stond op zonder markering.
+De nacht kwam rustig.
+Ik sliep diep.
+Morgen was nabij.`
+      },
+      {
+        day: 30,
+        morning: `De dertigste ochtend kwam zonder gewicht.
+Geen spanning.
+Geen verwachting.
+Mijn lichaam stond op zoals altijd.
+Mijn geest volgde zonder commentaar.
+Ik begon zonder controle.
+Bewegingen vloeiden samen.
+Niet los.
+Niet strak.
+Juist.
+Mijn ademhaling bleef vanzelfsprekend.
+Mijn aandacht volledig.
+Er was niets toe te voegen.
+Niets weg te nemen.
+Dit was geen hoogtepunt.
+Dit was consistentie.
+Ik bleef tot het einde.
+Zonder versnelling.
+Zonder afronding.
+Ik stond stil.`,
+        evening: `De laatste avond viel stil.
+Niet als einde.
+Als voortzetting zonder dag.
+Mijn lichaam was rustig.
+Mijn geest leeg.
+Ik zat zonder noodzaak.
+Gedachten kwamen niet.
+Dat was geen prestatie.
+Dat was gevolg.
+De ademhaling was diep.
+Langzaam.
+Vanzelfsprekend.
+Ik zag het pad zonder het te benoemen.
+Niet als overwinning.
+Niet als strijd.
+Als onderhoud.
+Ik stond op zonder ceremonie.
+De berg bleef.
+Ik bleef ook.
+Dit was geen afsluiting.
+Dit was wat resteert.`
+      }
+    ];
+
+    const calGrid = document.getElementById("calGrid");
+    const dayTitle = document.getElementById("dayTitle");
+    const dayMeta = document.getElementById("dayMeta");
+    const routineList = document.getElementById("routineList");
+    const heavyTaskEl = document.getElementById("heavyTask");
+    const morningStory = document.getElementById("morningStory");
+    const eveningStory = document.getElementById("eveningStory");
+    const doneBtn = document.getElementById("doneBtn");
+    const undoneBtn = document.getElementById("undoneBtn");
+    const statusNote = document.getElementById("statusNote");
+    const resetBtn = document.getElementById("resetBtn");
+    const todayBtn = document.getElementById("todayBtn");
+    const hideDoneToggle = document.getElementById("hideDoneToggle");
+
+    let selectedDay = null;
+    let doneSet = loadDoneSet();
+
+    function loadDoneSet(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(!raw) return new Set();
+        const arr = JSON.parse(raw);
+        return new Set(arr);
+      }catch(e){
+        return new Set();
+      }
+    }
+
+    function saveDoneSet(){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(doneSet)));
+    }
+
+    function renderCalendar(){
+      calGrid.innerHTML = "";
+      const hideDone = hideDoneToggle.checked;
+
+      for(let d=1; d<=30; d++){
+        const isDone = doneSet.has(d);
+        if(hideDone && isDone) continue;
+
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "dayBtn" + (isDone ? " done" : "") + (selectedDay===d ? " active" : "");
+        btn.dataset.day = String(d);
+
+        const dot = document.createElement("span");
+        dot.className = "dot";
+        btn.appendChild(dot);
+
+        const n = document.createElement("div");
+        n.className = "dayNum";
+        n.textContent = d;
+        btn.appendChild(n);
+
+        const m = document.createElement("div");
+        m.className = "dayMeta";
+        m.textContent = weekLabel(d);
+        btn.appendChild(m);
+
+        btn.addEventListener("click", () => selectDay(d));
+        calGrid.appendChild(btn);
+      }
+    }
+
+    function weekLabel(day){
+      if(day<=7) return "Week 1";
+      if(day<=14) return "Week 2";
+      if(day<=21) return "Week 3";
+      return "Week 4";
+    }
+
+    function selectDay(day){
+      selectedDay = day;
+      const entry = stories.find(s => s.day === day);
+
+      dayMeta.textContent = `Dag ${day} • ${weekLabel(day)}`;
+      dayTitle.textContent = "Wudanbegan";
+
+      routineList.innerHTML = "";
+      baseRoutine.forEach(item=>{
+        const li = document.createElement("li");
+        li.textContent = item;
+        routineList.appendChild(li);
+      });
+
+      heavyTaskEl.textContent = `Zware taak: ${heavyTasks[day-1]}`;
+
+      morningStory.textContent = entry ? entry.morning : "Geen tekst gevonden.";
+      eveningStory.textContent = entry ? entry.evening : "Geen tekst gevonden.";
+
+      doneBtn.disabled = false;
+      undoneBtn.disabled = false;
+
+      updateStatusNote();
+      renderCalendar();
+    }
+
+    function updateStatusNote(){
+      if(selectedDay == null){
+        statusNote.textContent = "";
+        return;
+      }
+      const isDone = doneSet.has(selectedDay);
+      statusNote.textContent = isDone
+        ? "Status: afgerond. Je hebt deze dag gemarkeerd als gedaan."
+        : "Status: open. Lees, voer uit, markeer als gedaan.";
+      doneBtn.textContent = isDone ? "Afgerond" : "Dag gedaan";
+      doneBtn.disabled = isDone;
+      undoneBtn.disabled = !isDone;
+    }
+
+    doneBtn.addEventListener("click", ()=>{
+      if(selectedDay == null) return;
+      doneSet.add(selectedDay);
+      saveDoneSet();
+      updateStatusNote();
+      renderCalendar();
+    });
+
+    undoneBtn.addEventListener("click", ()=>{
+      if(selectedDay == null) return;
+      doneSet.delete(selectedDay);
+      saveDoneSet();
+      updateStatusNote();
+      renderCalendar();
+    });
+
+    resetBtn.addEventListener("click", ()=>{
+      doneSet = new Set();
+      saveDoneSet();
+      renderCalendar();
+      updateStatusNote();
+    });
+
+    todayBtn.addEventListener("click", ()=>{
+      for(let d=1; d<=30; d++){
+        if(!doneSet.has(d)){
+          selectDay(d);
+          return;
+        }
+      }
+      selectDay(30);
+    });
+
+    hideDoneToggle.addEventListener("change", ()=>{
+      renderCalendar();
+    });
+
+    renderCalendar();
+    selectDay(1);
+  </script>
+</body>
+</html>
